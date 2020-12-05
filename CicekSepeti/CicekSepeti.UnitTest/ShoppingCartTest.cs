@@ -3,6 +3,7 @@ using CicekSepeti.DataAccess.UnitOfWork;
 using CicekSepeti.Domain.Entities;
 using CicekSepeti.Service.IServices;
 using CicekSepeti.Service.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -12,6 +13,24 @@ namespace CicekSepeti.UnitTest
 {
     public class ShoppingCartTest
     {
+        private readonly Mock<ILogger<ShoppingCartService>> _logger;
+        private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+
+        public ShoppingCartTest()
+        {
+            _logger = new Mock<ILogger<ShoppingCartService>>(MockBehavior.Loose);
+            _unitOfWorkMock = new Mock<IUnitOfWork>();
+
+        }
+
+        [Fact]
+        public async Task Should_ThrowEx_ParametersIsNull()
+        {
+
+            Assert.Throws<ArgumentNullException>(() => new ShoppingCartService(null, null));
+            Assert.Throws<ArgumentNullException>(() => new ShoppingCartService(_unitOfWorkMock.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new ShoppingCartService(null, _logger.Object));
+        }
 
         [Fact]
         public async Task Should_IsSuccessFalse_UserIsNull()
@@ -31,11 +50,10 @@ namespace CicekSepeti.UnitTest
             var productRepositoriesMock = new Mock<IProductRepository>(MockBehavior.Loose);
             productRepositoriesMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(product);
 
-            var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(m => m.UserRepository).Returns(userRepositoriesMock.Object);
-            unitOfWorkMock.Setup(m => m.ProductRepository).Returns(productRepositoriesMock.Object);
+            _unitOfWorkMock.Setup(m => m.UserRepository).Returns(userRepositoriesMock.Object);
+            _unitOfWorkMock.Setup(m => m.ProductRepository).Returns(productRepositoriesMock.Object);
 
-            IShoppingCartService shoppingCartServce = new ShoppingCartService(unitOfWorkMock.Object);
+            IShoppingCartService shoppingCartServce = new ShoppingCartService(_unitOfWorkMock.Object, _logger.Object);
 
             // act
             var actual = await shoppingCartServce.AddShoppingCart(shoppingCart);
@@ -61,11 +79,10 @@ namespace CicekSepeti.UnitTest
             var productRepositoriesMock = new Mock<IProductRepository>(MockBehavior.Loose);
             productRepositoriesMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Product)null);
 
-            var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(m => m.UserRepository).Returns(userRepositoriesMock.Object);
-            unitOfWorkMock.Setup(m => m.ProductRepository).Returns(productRepositoriesMock.Object);
+            _unitOfWorkMock.Setup(m => m.UserRepository).Returns(userRepositoriesMock.Object);
+            _unitOfWorkMock.Setup(m => m.ProductRepository).Returns(productRepositoriesMock.Object);
 
-            IShoppingCartService shoppingCartServce = new ShoppingCartService(unitOfWorkMock.Object);
+            IShoppingCartService shoppingCartServce = new ShoppingCartService(_unitOfWorkMock.Object, _logger.Object);
 
             // act
             var actual = await shoppingCartServce.AddShoppingCart(shoppingCart);
@@ -91,11 +108,10 @@ namespace CicekSepeti.UnitTest
             var productRepositoriesMock = new Mock<IProductRepository>(MockBehavior.Loose);
             productRepositoriesMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(product);
 
-            var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(m => m.UserRepository).Returns(userRepositoriesMock.Object);
-            unitOfWorkMock.Setup(m => m.ProductRepository).Returns(productRepositoriesMock.Object);
+            _unitOfWorkMock.Setup(m => m.UserRepository).Returns(userRepositoriesMock.Object);
+            _unitOfWorkMock.Setup(m => m.ProductRepository).Returns(productRepositoriesMock.Object);
 
-            IShoppingCartService shoppingCartServce = new ShoppingCartService(unitOfWorkMock.Object);
+            IShoppingCartService shoppingCartServce = new ShoppingCartService(_unitOfWorkMock.Object, _logger.Object);
 
             // act
             var actual = await shoppingCartServce.AddShoppingCart(shoppingCart);
@@ -125,12 +141,11 @@ namespace CicekSepeti.UnitTest
             var shoppingCartRepositoriesMock = new Mock<IShoppingCartRepository>(MockBehavior.Loose);
             shoppingCartRepositoriesMock.Setup(x => x.GetShoppingCartsByUserIdAndProductId(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync((ShoppingCart)null);
 
-            var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(m => m.UserRepository).Returns(userRepositoriesMock.Object);
-            unitOfWorkMock.Setup(m => m.ProductRepository).Returns(productRepositoriesMock.Object);
-            unitOfWorkMock.Setup(m => m.ShoppingCartRepository).Returns(shoppingCartRepositoriesMock.Object);
+            _unitOfWorkMock.Setup(m => m.UserRepository).Returns(userRepositoriesMock.Object);
+            _unitOfWorkMock.Setup(m => m.ProductRepository).Returns(productRepositoriesMock.Object);
+            _unitOfWorkMock.Setup(m => m.ShoppingCartRepository).Returns(shoppingCartRepositoriesMock.Object);
 
-            IShoppingCartService shoppingCartServce = new ShoppingCartService(unitOfWorkMock.Object);
+            IShoppingCartService shoppingCartServce = new ShoppingCartService(_unitOfWorkMock.Object, _logger.Object);
 
             // act
             var actual = await shoppingCartServce.AddShoppingCart(shoppingCart);
@@ -158,12 +173,11 @@ namespace CicekSepeti.UnitTest
             var shoppingCartRepositoriesMock = new Mock<IShoppingCartRepository>(MockBehavior.Loose);
             shoppingCartRepositoriesMock.Setup(x => x.GetShoppingCartsByUserIdAndProductId(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(shoppingCart);
 
-            var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(m => m.UserRepository).Returns(userRepositoriesMock.Object);
-            unitOfWorkMock.Setup(m => m.ProductRepository).Returns(productRepositoriesMock.Object);
-            unitOfWorkMock.Setup(m => m.ShoppingCartRepository).Returns(shoppingCartRepositoriesMock.Object);
+            _unitOfWorkMock.Setup(m => m.UserRepository).Returns(userRepositoriesMock.Object);
+            _unitOfWorkMock.Setup(m => m.ProductRepository).Returns(productRepositoriesMock.Object);
+            _unitOfWorkMock.Setup(m => m.ShoppingCartRepository).Returns(shoppingCartRepositoriesMock.Object);
 
-            IShoppingCartService shoppingCartServce = new ShoppingCartService(unitOfWorkMock.Object);
+            IShoppingCartService shoppingCartServce = new ShoppingCartService(_unitOfWorkMock.Object, _logger.Object);
 
             // act
             var actual = await shoppingCartServce.AddShoppingCart(shoppingCart);

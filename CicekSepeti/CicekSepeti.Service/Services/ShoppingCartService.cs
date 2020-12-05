@@ -16,8 +16,8 @@ namespace CicekSepeti.Service.Services
 
         public ShoppingCartService(IUnitOfWork unitOfWork, ILogger<ShoppingCartService> logger)
         {
-            this._unitOfWork = unitOfWork;
-            _logger = logger;
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<ResponseModel> AddShoppingCart(ShoppingCart shoppingCart)

@@ -1,6 +1,7 @@
 ﻿using CicekSepeti.DataAccess.IRepositories;
 using CicekSepeti.DataAccess.Repositories;
 using CicekSepeti.Domain.IContext;
+using System;
 using System.Threading.Tasks;
 
 namespace CicekSepeti.DataAccess.UnitOfWork
@@ -14,7 +15,7 @@ namespace CicekSepeti.DataAccess.UnitOfWork
 
         public CicekSepetiUnitOfWork(ICicekSepetiDbContext context)
         {
-            this._context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public IShoppingCartRepository ShoppingCartRepository => _shoppingCartRepository = _shoppingCartRepository ?? new ShoppingCartRepository(_context);
