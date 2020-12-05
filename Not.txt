@@ -1,0 +1,23 @@
+YAPILANLAR
+
+Projeyi .Net Core 3.1 ile oluşturdum.
+Sepete eklemeye ek olarak userId 'ye göre sepet listeleme ekledim.
+Database kurulumu gerekmemesi için In Memory Database kullandım ve buna test verisini ayağa kalkarken ekledim.
+API'leri daha rahat test etmek için Swagger ekledim ve onu acılış sayfası haline getirdim.
+Exception middleware ve filter ekledim.
+Logları dosyaya yazdırdım.
+Repository pattern ve unit of work kullandım.
+
+Sepet ekleme servisi için unit testlerini yazdım.
+
+User
+efe997f6-823e-4ad2-a7df-22ff0ab59eac
+60e709f3-4f3b-4833-838d-296a9e345b6d
+bc1bf525-5234-467f-b743-7241487bc3d2
+
+Product
+91ac884f-815b-4410-a479-a43f71316e20
+e5f74a86-3bf4-4c65-8e94-15575fbe6bd4
+c3589c8b-ec40-492d-911c-4f7ade2cc180
+48f90b81-3c8b-415b-b697-fe9df50e4e96
+39d071de-ff88-43de-8fa7-1d76ba3a0509

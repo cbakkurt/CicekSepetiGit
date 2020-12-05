@@ -25,26 +25,36 @@ namespace CicekSepeti.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<ShoppingCartDTO>> GetBasket(Guid userId)
+        [HttpGet("GetShoppingCart")]
+        public async Task<ActionResult<ShoppingCartDTO>> GetShoppingCart(Guid userId)
         {
-            var baskets = await _shoppingCartService.GetAllShoppingCartsByUserId(userId);
+            _logger.LogInformation($"{userId} için sepet çağrıldı.");
 
-            var basketDto = _mapper.Map<IEnumerable<ShoppingCart>, IEnumerable<ShoppingCartDTO>>(baskets);
+            var shoppingCart = await _shoppingCartService.GetAllShoppingCartsByUserId(userId);
 
-            return Json(basketDto);
+            _logger.LogInformation($"{userId} için sepet cevap döndü.");
+
+            var shoppingCartDTO = _mapper.Map<IEnumerable<ShoppingCart>, IEnumerable<ShoppingCartDTO>>(shoppingCart);
+
+            _logger.LogInformation($"{userId} için sepet mapping işlemi yapıldı.");
+
+            return Json(shoppingCartDTO);
         }
 
-        [HttpPost]
-        public async Task<JsonResult> AddBasketJson([FromBody] ShoppingCartDTO shoppingCartDTO)
+        [HttpPost("AddShoppingCart")]
+        public async Task<JsonResult> AddShoppingCart([FromBody] ShoppingCartDTO shoppingCartDTO)
         {
+            _logger.LogInformation($"User: {shoppingCartDTO.UserId} , Ürün :{shoppingCartDTO.ProductId} için sepet ekleme çağrıldı.");
+
             var shoppingCart = _mapper.Map<ShoppingCartDTO, ShoppingCart>(shoppingCartDTO);
 
-            _logger.LogInformation("testlog123");
-            
-            var newBasket = await _shoppingCartService.AddShoppingCart(shoppingCart);
+            _logger.LogInformation($"User: {shoppingCartDTO.UserId} , Ürün :{shoppingCartDTO.ProductId} için sepet mapping işlemi yapıldı..");
 
-            return Json(newBasket);
+            var serviceResponse = await _shoppingCartService.AddShoppingCart(shoppingCart);
+
+            _logger.LogInformation($"User: {shoppingCartDTO.UserId} , Ürün :{shoppingCartDTO.ProductId} için servis cevap döndü. Başarılı :{serviceResponse.IsSuccess}.");
+
+            return Json(serviceResponse);
         }
     }
 }
